@@ -28,8 +28,17 @@
 
 ## Installation
 
+1. Clonar el repositorio
+2. Duplicar el ```.env.template``` y renombrarlo a ```.env```
+
+3. Instalar dependencias del proyecto
 ```bash
 $ yarn install
+```
+
+4. Levantar el docker-compose
+```bash
+$ docker-compose up -d
 ```
 
 ## Running the app
