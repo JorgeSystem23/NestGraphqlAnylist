@@ -10,14 +10,14 @@ export class ItemsResolver {
   constructor(private readonly itemsService: ItemsService) {}
 
   @Mutation(() => Item)
-  async createItem(
+   createItem(
     @Args("createItemInput") createItemInput: CreateItemInput
   ): Promise<Item> {
     return this.itemsService.create(createItemInput);
   }
 
   @Query(() => [Item], { name: "items" })
-  async findAll(): Promise<Item[]> {
+   findAll(): Promise<Item[]> {
     return this.itemsService.findAll();
   }
 
