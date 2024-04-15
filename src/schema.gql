@@ -17,7 +17,7 @@ type Query {
 type Mutation {
   createItem(createItemInput: CreateItemInput!): Item!
   updateItem(updateItemInput: UpdateItemInput!): Item!
-  removeItem(id: Int!): Item!
+  removeItem(id: ID!): Item!
 }
 
 input CreateItemInput {
@@ -30,5 +30,5 @@ input UpdateItemInput {
   name: String
   quantity: Float
   quantityUnits: String
-  id: Int!
+  id: ID!
 }
