@@ -3,6 +3,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 
@@ -40,8 +41,16 @@ export class UsersService {
     return [];
   }
 
-  findOne(id: string): Promise<User> {
-    throw new Error("Method not implemented.");
+  async findOneByEmail(email: string): Promise<User> {
+    try {
+      return await this.usersRepository.findOneByOrFail({ email });
+    } catch (error) {
+      throw new NotFoundException(`${email} not found`);
+      /* this.handleDBErrors({
+        code: 'err-001',
+        detail: `${email} not found`,
+      }); */
+    }
   }
 
   /*   update(id: number, updateUserInput: UpdateUserInput) {
@@ -54,6 +63,10 @@ export class UsersService {
 
   private handleDBErrors(error: any): never {
     if (error.code === "23505") {
+      throw new BadRequestException(error.detail.replace("Key ", ""));
+    }
+
+    if (error.code === "err-001") {
       throw new BadRequestException(error.detail.replace("Key ", ""));
     }
 

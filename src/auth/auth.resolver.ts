@@ -1,26 +1,33 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
-import { AuthResponseTypes } from "./types/auth-response.types";
-import { SignupInput } from "./dto/input/signup.input";
+import { AuthResponse } from "./types/auth-response";
+import { SignupInput, LoginInput } from "./dto/input";
+import { UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 
 @Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Mutation(() => AuthResponseTypes, { name: "signup" })
+  @Mutation(() => AuthResponse, { name: "signup" })
   async signup(
     @Args("signupInput") signupInput: SignupInput
-  ): Promise<AuthResponseTypes> {
+  ): Promise<AuthResponse> {
     return this.authService.signup(signupInput);
   }
 
-  /*   @Mutation({ name: "login" })
-  async login(): Promise<> {
-    // return this.authService.login();
+  @Mutation(() => AuthResponse, { name: "login" })
+  async login(
+    @Args("loginInput") loginInput: LoginInput
+  ): Promise<AuthResponse> {
+    return this.authService.login(loginInput);
   }
 
-  @Query({name: 'revalite'})
-  async revaliteToken() {
-    // return this.authService.revaliteToken();
-  } */
+  @Query(() => AuthResponse, { name: "revalite" })
+  @UseGuards(JwtAuthGuard)
+  revaliteToken(): // currentUser user:User
+  AuthResponse {
+    // return this.authService.revaliteToken(user);
+    throw new Error("Not implemented");
+  }
 }
